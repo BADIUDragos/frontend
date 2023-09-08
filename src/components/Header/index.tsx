@@ -1,5 +1,6 @@
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+import Login from './UserInfo'
 
 type Props = {}
 
@@ -18,7 +19,7 @@ const Header = (props: Props) => {
             <Nav className="ms-auto">
               <LinkContainer to="/cart">
                 <Nav.Link>
-                  Icon here
+                  <Login/>
                 </Nav.Link>
               </LinkContainer>
             </Nav>

@@ -1,22 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { API_URL } from '../../constants/urls';
 
-interface Credentials {
-  username: string;
-  password: string;
-}
+import { LoginInput, LoginResponse } from '../interfaces/userInfoInterfaces';
 
-interface LoginResponse {
-  refresh: string;
-  access: string;
-  id: number;
-  username: string;
-  email: string;
-  permissions: string[];
-  token: string;
-}
-
-export const loginAsync = createAsyncThunk<LoginResponse, Credentials>('auth/login', async (credentials) => {
+export const loginAsync = createAsyncThunk<LoginResponse, LoginInput>('auth/login', async (credentials) => {
   try {
     const response = await fetch(`${API_URL}/auth/login/`, {
       method: 'POST',
