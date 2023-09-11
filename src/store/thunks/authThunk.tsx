@@ -1,8 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { API_URL } from '../../constants/urls';
+import loginSuccess from '../slices/authSlice'
 
 
-const API_TOKEN_URL = API_URL + '/auth/login'
+const API_TOKEN_URL = API_URL + '/auth/token'
 const API_TOKEN_REFRESH_URL = API_URL + '/auth/refresh'
 
 interface LoginCredentials {
@@ -11,8 +12,8 @@ interface LoginCredentials {
 }
 
 export const login = createAsyncThunk(
-  "auth/login",
-  async (credentials: LoginCredentials, { rejectWithValue }) => {
+  "auth/token",
+  async (credentials: LoginCredentials, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetch(API_TOKEN_URL, {
         method: "POST",
@@ -28,6 +29,7 @@ export const login = createAsyncThunk(
       }
 
       const data = await response.json();
+
       return data;
     } catch (error) {
       return rejectWithValue(error);

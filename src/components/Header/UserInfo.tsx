@@ -3,7 +3,7 @@ import { Nav } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 
-import { selectUserInfo } from "../../store";
+// import { selectUserInfo } from "../../store";
 
 function Login() {
   return (
@@ -18,7 +18,7 @@ function Login() {
 
 const UserInfo = () => {
   const dispatch = useDispatch();
-  const userInfo = useSelector(selectUserInfo);
+  // const userInfo = useSelector(selectUserInfo);
 
   // const { user, tokens, status, error } = useSelector((state: UserInfoState) => state.userInfo);
 

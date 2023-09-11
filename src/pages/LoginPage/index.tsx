@@ -5,46 +5,45 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
 import FormContainer from "../../components/FormContainer";
+import { login } from "../../store/thunks/authThunk";
+import { AppDispatch } from "../../store/store";
 
-function LoginScreen() {
-  const [email, setEmail] = useState("");
+const LoginPage = () => {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const location = useLocation();
   const navigate = useNavigate();
   const redirect = location.search ? location.search.split("=")[1] : "/";
 
-  const userLogin = useSelector((state) => state.userLogin);
-  const { error, loading, userInfo } = userLogin;
-
-  useEffect(() => {
-    if (userInfo) {
-      navigate(redirect);
-    }
-  }, [navigate, userInfo, redirect]);
-
-  const submitHandler = (e) => {
+  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(login(email, password));
+    dispatch(login({ username, password })).then((resultAction) => {
+      if (login.fulfilled.match(resultAction)) {
+        // Login was successful
+        // You can access the response data with resultAction.payload
+      } else if (login.rejected.match(resultAction)) {
+        // Login failed
+        // You can access the error message with resultAction.error.message
+      }
+    });
   };
 
   return (
     <FormContainer xs={12} md={6}>
       <h1>Sign In</h1>
-      {error && <Message variant="danger">{error}</Message>}
-      {loading && <Loader />}
 
       <Form onSubmit={submitHandler}>
         <Form.Group controlId="email">
-          <Form.Label>Email Address</Form.Label>
+          <Form.Label>Username</Form.Label>
           <Form.Control
             required
-            type="email"
-            placeholder="Enter Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="username"
+            placeholder="Enter Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           ></Form.Control>
         </Form.Group>
 
@@ -62,23 +61,8 @@ function LoginScreen() {
           Sign In
         </Button>
       </Form>
-
-      <Row className="py-3">
-        <Col>
-          New Customer?{" "}
-          <Link to={redirect ? `/register?redirect=${redirect}` : "/register"}>
-            Register
-          </Link>
-        </Col>
-        <Col>
-          Forgot Password?{" "}
-          <Link to={`/resetpassword`}>
-            Reset Password
-          </Link>
-        </Col>
-      </Row>
     </FormContainer>
   );
 }
 
-export default LoginScreen;
+export default LoginPage;
