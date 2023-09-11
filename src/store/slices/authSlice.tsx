@@ -1,39 +1,40 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { loginAsync } from '../thunks/userInfoThunk'
 
 interface AuthState {
-  user: {
-    id: number;
-    username: string;
-    email: string;
-    permissions: string[]; 
-  } | null;
-  token: {
-    refresh: string;
-    access: string;
-  } | null;
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
-  error: string | null;
+  user: User | null;
+  accessToken: string | null;
+  refreshToken: string | null;
 }
+
+interface User {
+  id: number;
+  username: string;
+  // Add more user fields as needed
+}
+
+const initialState: AuthState = {
+  user: null,
+  accessToken: null,
+  refreshToken: null,
+};
 
 const authSlice = createSlice({
   name: "auth",
-  initialState: {
-      user: null, // User data
-      token: null, // JWT token
-  },
+  initialState,
   reducers: {
-      setUserAndToken: (state, action) => {
-          state.user = action.payload.user;
-          state.token = action.payload.token;
-      },
-      clearUserAndToken: (state) => {
-          state.user = null;
-          state.token = null;
-      },
+    loginSuccess: (state, action: PayloadAction<{ user: User; accessToken: string; refreshToken: string }>) => {
+      state.user = action.payload.user;
+      state.accessToken = action.payload.accessToken;
+      state.refreshToken = action.payload.refreshToken;
+    },
+    logout: (state) => {
+      state.user = null;
+      state.accessToken = null;
+      state.refreshToken = null;
+    },
   },
 });
 
-export const { setUserAndToken, clearUserAndToken } = authSlice.actions;
+export const { loginSuccess, logout } = authSlice.actions;
 
 export default authSlice.reducer;
